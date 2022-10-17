@@ -1,0 +1,73 @@
+import { useEffect, useRef } from 'react';
+import * as Tone from '../../node_modules/tone';
+
+import BD from '../assets/sounds/BD.mp3'
+import SD from '../assets/sounds/SD.mp3'
+import ride from '../assets/sounds/ride.mp3'
+import HH from '../assets/sounds/HH.mp3'
+
+//import * as Tone from 'tone';
+
+export default function useSounds(){
+const mySampler = useRef(null);
+
+  useEffect(()=> {
+    const sampler = new Tone.Sampler({
+      C4: BD,
+      "D#4": SD,
+      "F#4": ride,
+      A4: HH
+    }).toDestination();
+
+    Tone.loaded().then(() => {
+      mySampler.current = sampler;
+    })
+  }, []);
+
+  function soundPlay(note) {
+    mySampler.current.triggerAttackRelease([note], 4);
+  };
+
+  function handleKeyDown({ key }) {
+    switch(key) {
+      case "a":
+        soundPlay("C4");   
+        break;
+      case "z":
+        soundPlay("D#4");
+        break;
+      case "e":
+        soundPlay("F#4");
+        break;
+      case "r":
+        soundPlay("A4");
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(()=>{
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const buttonsList = [
+    {
+      soundPlay: ()=> soundPlay("C4"),
+    },
+    {
+      soundPlay: ()=> soundPlay("D#4"),
+    },
+    {
+      soundPlay: ()=> soundPlay("F#4"),
+    },
+    {
+      soundPlay: ()=> soundPlay("A4"),
+    },
+  ]
+
+  return { buttonsList };
+};

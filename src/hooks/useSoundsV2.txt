@@ -1,0 +1,44 @@
+import { useEffect, useRef } from 'react';
+import * as Tone from '../../node_modules/tone';
+
+
+import BD from '../assets/sounds/BD.mp3'
+import SD from '../assets/sounds/SD.mp3'
+import ride from '../assets/sounds/ride.mp3'
+import HH from '../assets/sounds/HH.mp3'
+
+//import * as Tone from 'tone';
+
+export default function useSounds(){
+const mySampler = useRef(null);
+
+  useEffect(()=> {
+    const sampler = new Tone.Sampler({
+      C4: BD,
+      "D#4": SD,
+      "F#4": ride,
+      A4: HH
+    }).toDestination();
+
+    Tone.loaded().then(() => {
+      mySampler.current = sampler;
+    })
+  }, []);
+
+  const buttonsList = [
+    {
+      soundPlay: ()=> mySampler.current.triggerAttackRelease(["C4"], 4)
+    },
+    {
+      soundPlay: ()=> mySampler.current.triggerAttackRelease(["D#4"], 4)
+    },
+    {
+      soundPlay: ()=> mySampler.current.triggerAttackRelease(["F#4"], 4)
+    },
+    {
+      soundPlay: ()=> mySampler.current.triggerAttackRelease(["A4"], 4)
+    },
+  ]
+
+  return { buttonsList };
+};
