@@ -44,4 +44,8 @@ border-bottom: solid 2px ${props=>props.isCurrentPage ? "": "transparent"};
 &:hover{
   border-bottom: solid 2px;
 }
+
+@media(max-width : 640px){
+  font-size: 12px;
+}
 `;
